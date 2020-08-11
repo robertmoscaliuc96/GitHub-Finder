@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {useState, Fragment} from 'react';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
@@ -11,65 +11,68 @@ import Alert from './components/layout/Alert';
 import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 
-class App extends Component {
+const App = () => {
   // lifecycle 
-  state= {
-    users: [],
-    user: {},
-    loading: false,
-    alert: null
-  }
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
 
   // Get single Github user
-  getUser = async (username) => {
-    this.setState({loading: true})
+   const getUser = async (username) => {
+    setLoading(true)
     
     const res= await axios.get(`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    
-    this.setState({user:res.data, loading:false})
+
+    setUser(res.data.items);
+    setLoading(false);
   }
   
   
   // Takes the props from Search.js
   // Search github users
-  searchUsers = async (text) => {
-    this.setState({loading: true})
+   const searchUsers = async (text) => {
+    setLoading(true)
     
     const res= await axios.get(`https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
     
-    this.setState({users:res.data.items, loading:false})
+    setUsers(res.data.items);
+    setLoading(false);
   }
   
   // clear users from state
-  clearUsers = () => this.setState({users: [], loading:false});
+  const clearUsers = () =>{   
+      setUsers([]);
+      setLoading(false);
+    };
   
   // Alert if the form is empty 
-  setAlert = (msg, type) => {
-    this.setState({alert: {msg, type}})
+  const showAlert = (msg, type) => {
+   setAlert({msg, type})
     
-    setTimeout( () => this.setState({alert:null}), 5000)
+    setTimeout( () => setAlert(null), 5000)
   }
 
 
   
   
-  render(){
-    const {loading, user, users} = this.state
+
+    //const {loading, user, users} = this.state
     return (
       <Router>
     <div className="App">
         <Navbar/>
         <div className="container">
           
-          <Alert alert = {this.state.alert}></Alert>
+          <Alert alert = {alert}></Alert>
           <Switch>
             <Route exact path="/" render={ props => (
               <Fragment>
                 <Search  
-                  searchUsers={this.searchUsers} 
-                  clearUsers={this.clearUsers} 
-                  showClear={this.state.users.length > 0 ? true : false}
-                  setAlert={this.setAlert}  
+                  searchUsers={searchUsers} 
+                  clearUsers={clearUsers} 
+                  showClear={users.length > 0 ? true : false}
+                  setAlert={showAlert}  
                   />                
                 <Users loading={loading} users={users}/> 
               </Fragment>
@@ -77,7 +80,7 @@ class App extends Component {
             <Route exact path="/about" component={About}/>
             <Route exact path="/jobs" component={Jobs}/>
             <Route exact path="/user/:login" render={props => (
-              <User {...props} getUser={this.getUser} user={user} loading={loading}/>
+              <User {...props} getUser={getUser} user={user} loading={loading}/>
             )}/>
           </Switch>
  
@@ -89,16 +92,6 @@ class App extends Component {
 );
 }
 
-}
+
 
 export default App;
-//this will run when the components mount
-/*    async componentDidMount() {
-  // this is how to change a state in react using setState
- this.setState({loading: true})
- const res= await axios.get(`https://api.github.com/users?client_id=${process.env.REACT_APP_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
- 
- this.setState({users:res.data, loading:false})
-}
- */
- 
