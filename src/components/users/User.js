@@ -1,0 +1,32 @@
+import React, { Component } from 'react'
+
+export class User extends Component {
+    // component did mount fires right away when the this component is loaded
+    componentDidMount() {
+        // 
+        this.props.getUser(this.props.match.params.login)
+    }
+
+    render() {
+        const {
+            name,
+            avatar_url,
+            location,
+            bio,blog,
+            login,
+            html_url,
+            followers,
+            public_repos,
+            public_gists,
+            hireable}=this.props.user
+
+        const {loading } =this.props;
+        return (
+            <div>
+                {name}
+            </div>
+        )
+    }
+}
+
+export default User
