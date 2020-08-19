@@ -1,5 +1,5 @@
 import {createContext} from 'react'
 
-const alertContext= createContext();
+const githubContext = createContext();
 
-export default alertContext
+export default githubContext

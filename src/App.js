@@ -1,11 +1,11 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import User from './components/users/User'
 import About from './components/pages/About';
 import NotFound from './components/pages/NotFound';
 import Home from './components/pages/Home';
-import Jobs from './components/pages/Jobs';
+import JobsGit from './components/pages/JobsGit';
 import Alert from './components/layout/Alert';
 import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -27,7 +27,7 @@ const App = () => {
                 <Route exact path='/home' component={Home} />
                 <Route exact path='/about' component={About} />
                 <Route exact path='/user/:login' component={User} />
-                <Route exact path="/jobs" component={Jobs}/>
+                <Route exact path="/jobs" component={JobsGit}/>
                 <Route component={NotFound}/>
                 
               </Switch>
