@@ -1,28 +1,17 @@
-import React, {useState} from 'react';
-import useFetchJobs from '../context/githubjobs/fetchJobs'
-import Job from "../jobs/Job"
-import {Container} from 'react-bootstrap'
+import React from 'react';
 
-
-function JobsGit() {
-
-  const [params,setParams] = useState({});
-  const [page, setPage] = useState(1)
-  const {jobs,loading,error} = useFetchJobs(params,page)
+function About() {
 
   return (
-    <Container>
-    <h1>HI</h1>
-              {loading && <h1>Loading...</h1>}
-              {error && <h1>Error....</h1>}
-              {jobs.map(job => {
-                return <Job key={job.id} job={job}/>
-              })}
-    </Container>
+        <div>
+        <h1>This is about page work in progress</h1>
+         </div>
+
+
   );
 }
 
-export default JobsGit
+export default About
 
 
 

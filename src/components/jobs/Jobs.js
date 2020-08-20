@@ -1,27 +1,28 @@
-import React, {Component} from 'react';
-import JobItem from './JobItem'
-// import githubJobsReducer from '../context/githubjobs/githubJobsReducer';
+import React, {useState} from 'react';
+import GithubJobsState from '../context/githubjobs/githubJobsState'
+import Job from "../jobs/Job"
+import Spinner from '../layout/Spinner'
+import {Container} from 'react-bootstrap'
 
-class Jobs extends Component {
+function Jobs() {
 
+    const [params,setParams] = useState({});
+    const [page, setPage] = useState(1)
+    const {jobs,loading,error} = GithubJobsState(params,page)
+  
+    return (
+      <Container>
+      <h1>Jobs</h1>
+                {loading && <Spinner></Spinner>}
+                {error && <h1>Error....</h1>}
+                {jobs.map(job => {
+                  return <Job key={job.id} job={job}/>
+                })}
+      </Container>
+    );
+  }
+  
 
-    render() {
-        return(
-            <div style= {userStyle}>
-                {this.props.jobs.map(job=>(
-                    <JobItem key={job.id} job={job}/>
-                ))}
-
-            </div>
-        )
-    }
-}
-
-const userStyle = {
-    display: "grid",
-    gridTemplateColums: "repeat(3,1fr)",
-    gridGap: "1rem"
-}
 
 
 export default Jobs

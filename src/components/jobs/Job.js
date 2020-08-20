@@ -1,17 +1,11 @@
-import React, { useEffect,Fragment, useContext } from 'react';
+import React, {useContext} from 'react';
 import GithubJobsContext from '../context/githubjobs/githubJobsContext'
-import githubContext from '../context/github/githubContext';
-import { GET_USER } from '../context/types';
 
 
 const Job = ({job}) => {
-    const githubJobsContext = useContext(GithubJobsContext);
 
-    const{searchJobs,searchPageJobs, jobs} = githubContext;
+    //const githubJobsContext= useContext(GithubJobsContext);
 
-    useEffect ( () => {
-
-    },[])
 
     return (
         <div>

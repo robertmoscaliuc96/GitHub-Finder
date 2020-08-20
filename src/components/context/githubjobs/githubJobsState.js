@@ -1,72 +1,72 @@
-import React, {useReducer} from 'react';
-import axios from 'axios';
-import GithubJobsContext from './githubJobsContext';
+import { useReducer, useEffect } from 'react'
+import axios from 'axios'
 import GithubJobsReducer from './githubJobsReducer';
 import {
-    MAKE_REQUEST,
-    ERROR,
-    GET_JOBS,
-    UPDATE_NEXT_PAGE,
-    SET_LOADING,
+  MAKE_REQUEST,
+  ERROR,
+  GET_JOBS,
+  UPDATE_NEXT_PAGE,
   
-  } from '../types';
 
-const BASE_URL = 'https://api.github.com/users'
+} from '../types';
 
-const GithubJobsState = props => {
+
+const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json'
+
+
+ const GithubJobsState = (params, page)=> {
 
     const initialState = {
         jobs: [],
-        loading: true,
-
+        loading: false
+        
     }
+    const [state, dispatch] = useReducer(GithubJobsReducer, initialState)
 
-    const [state, dispatch] = useReducer(GithubJobsReducer, initialState);
-
-    const searchJobs = async () => {
-        setLoading();
+    useEffect(() => {
 
         const cancelToken1 = axios.CancelToken.source()
-        dispatch({ type: MAKE_REQUEST })
-
-        const res= await axios.get(BASE_URL, {
-            cancelToken: cancelToken1.token,
-            params: {markdown: true, page: page, ...params}
-        });
         dispatch({
-            type:GET_JOBS,
-            payload: res.data
+             type: MAKE_REQUEST 
+            })
+
+        axios.get(BASE_URL, {
+            cancelToken: cancelToken1.token,
+            params: { markdown: true, page: page, ...params}
+        }).then(res => {
+        dispatch({ 
+            type: GET_JOBS, 
+            payload: { jobs: res.data } }) 
+        }).catch(e => {
+        if (axios.isCancel(e)) return
+        dispatch({ 
+            type: ERROR, 
+            payload: { error: e } }) 
         })
 
-    }
-    const searchPageJobs = async () => {
         const cancelToken2 = axios.CancelToken.source()
 
-        const res= await axios.get(BASE_URL, {
-            cancelToken: cancelToken2.token,
-            params: {markdown: true, page: page + 1, ...params}
-        });
-        dispatch({
-            type:UPDATE_NEXT_PAGE,
-            payload: {hasNextPage: res.data.length !== 0}
+        axios.get(BASE_URL, {
+        cancelToken: cancelToken2.token,
+        params: { markdown: true, page: page + 1, ...params }
+        }).then(res => {
+        dispatch({ 
+            type: UPDATE_NEXT_PAGE, 
+            payload: { hasNextPage: res.data.length !== 0 } }) 
+        }).catch(e => {
+        if (axios.isCancel(e)) return
+        dispatch({ 
+            type: ERROR, 
+            payload: { error: e } }) 
         })
 
-    }
-    const setLoading= () => {
-        dispatch({type: SET_LOADING});
-    }
-
-    return <GithubJobsContext.Provider 
-                    value={{
-                        jobs: state.jobs,
-                        loading: loading.jobs,
-                        searchJobs,
-                        searchPageJobs
-                    }}
-                    >
-                    {props.children}
-                    </GithubJobsContext.Provider>
-
+        return () => {
+        cancelToken1.cancel()
+        cancelToken2.cancel()
+        }
+  }, [])
+  
+  return state
 }
 
 export default GithubJobsState
