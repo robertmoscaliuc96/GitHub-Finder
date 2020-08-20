@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import GithubContext from '../context/github/githubContext';
 import AlertContext from '../context/alert/alertContext';
+import {Form,Col,Button} from 'react-bootstrap'
 
 
 
@@ -24,17 +25,19 @@ const Search =() => {
         }
     }
         return (
-            <div>
-                <form onSubmit={onSubmit} className="form">
-                    <input type="text" name="text" placeholder="Search users..." value={text} onChange={onChange}
-                    />
-                    <input type="submit" value="Search" className="btn btn-dark btn-block"></input>
-                </form>
+            <Form onSubmit={onSubmit} className="mb-4">
+                <Form.Row>
+                        <Form.Group  as={Col}>
+                            <Form.Control onChange={onChange} type="text" name="text" placeHolder="Search Users..." value={text}/>
+                            <Button size="lg" block type="submit" value="Search" variant="primary">Search</Button>
+                        </Form.Group>
+                </Form.Row>
+
                     {githubContext.users.length > 0 && (
                     <button className="btn btn-light btn-block" onClick={githubContext.clearUsers}>Clear</button>
 
                 )}
-            </div>
+            </Form>
         )
     }
 

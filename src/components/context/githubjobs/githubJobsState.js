@@ -64,6 +64,7 @@ const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/po
         cancelToken1.cancel()
         cancelToken2.cancel()
         }
+        // eslint-disable-next-line
   }, [])
   
   return state
