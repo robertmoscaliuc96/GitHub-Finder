@@ -14,10 +14,10 @@ const Navbar = ({icon,title}) => {
                         <Link to="/home">Home</Link>
                     </li>
                     <li>
-                        <Link to="/about">About</Link>
+                        <Link to="/jobs">Jobs</Link>
                     </li>
                     <li>
-                        <Link to="/jobs">Jobs</Link>
+                        <Link to="/about">About</Link>
                     </li>
                 </ul>
             </div>
