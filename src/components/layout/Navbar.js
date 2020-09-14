@@ -5,8 +5,8 @@ import {Link} from 'react-router-dom'
 const Navbar = ({icon,title}) => {
 
         return (
-            <div className="navbar bg-primary">
-                <h1>
+            <div className="navbar">
+                <h1 className="title">
                  <i className={icon} /> {title}
                 </h1>
                 <ul>
@@ -23,7 +23,7 @@ const Navbar = ({icon,title}) => {
 
 // this is how to do with functional components
 Navbar.defaultProps= {
-    title:"Github Finder",
+    title:"GitHub Finder",
     icon: "fab fa-github"
 }
 
